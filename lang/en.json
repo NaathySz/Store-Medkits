@@ -1,0 +1,10 @@
+{
+    "Prefix": "{red}[Medkit] {white}",
+
+    "Maximum uses per round": "You have reached the maximum uses per round",
+    "Not enough credits": "Not enough credits to buy a medkit",
+    "Healing": "You used a medkit for {gold}{0}{white} credits. Health: {green}{1}{white}/{red}{2}{white}. Uses left this round: {darkblue}{3}",
+    "Used a medkit": "You used a medkit for {gold}{0}{white} credits. Health set to {green}{1}{white}. Uses left this round: {darkblue}{2}",
+    "Cannot be set to a lower value": "Health cannot be set to a lower value",
+    "Cannot use medkit with current HP": "You can only use a medkit when your HP is below {green}{0}"
+}
