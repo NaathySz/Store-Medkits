@@ -4,7 +4,7 @@
     "Maximum uses per round": "Você chegou ao máximo de usos por round",
     "Not enough credits": "Sem créditos o suficiente para comprar um medkit",
     "Healing": "Você usou um medkit por {gold}{0} {white}créditos. Vida: {green}{1}{white}/{red}{2}{white}. Usos restantes nesse round: {darkblue}{3}",
-    "Used a medkit": "Você usou um medkit por {gold}{0} {white}créditos. Vida setada em {green}{1}{white}. Usos restantes nesse round: {darkblue}{2}",
+    "Health set": "Você usou um medkit por {gold}{0} {white}créditos. Vida setada em {green}{1}{white}. Usos restantes nesse round: {darkblue}{2}",
     "Cannot be set to a lower value": "A vida não pode ser setada para um valor menor",
     "Cannot use medkit with current HP": "Você só pode usar um medkit quando sua vida estiver abaixo de {green}{0}"
 }
