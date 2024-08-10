@@ -226,7 +226,7 @@ namespace Store_Medkit
             player.PlayerPawn.Value.Health = newHealth;
             Utilities.SetStateChanged(player.PlayerPawn.Value, "CBaseEntity", "m_iHealth");
 
-            player.PrintToChat(Localizer["Prefix"] + Localizer["Used a medkit", creditCost, newHealth, playerUsage.UsesLeft]);
+            player.PrintToChat(Localizer["Prefix"] + Localizer["Health set", creditCost, newHealth, playerUsage.UsesLeft]);
         }
 
         private int ParseHealthAmount(string amount, int currentHealth)
