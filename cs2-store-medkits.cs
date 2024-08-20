@@ -1,4 +1,4 @@
-﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
@@ -73,7 +73,7 @@ namespace Store_Medkit
     public class Store_Medkit : BasePlugin, IPluginConfig<Store_MedkitConfig>
     {
         public override string ModuleName => "Store Module [Medkits]";
-        public override string ModuleVersion => "0.0.1";
+        public override string ModuleVersion => "0.0.2";
         public override string ModuleAuthor => "Nathy";
 
         public IStoreApi? StoreApi { get; set; }
@@ -118,6 +118,12 @@ namespace Store_Medkit
         public void Command_Medkit(CCSPlayerController? player, CommandInfo info)
         {
             if (player == null || player.PlayerPawn?.Value == null) return;
+
+            if (!player.IsAlive())
+            {
+                player.PrintToChat(Localizer["Prefix"] + "You cannot use a medkit now");
+                return;
+            }
 
             var customConfig = GetCustomConfig(player);
             int maxUsePerRound = customConfig?.MaxUsePerRound ?? Config.MaxUsePerRound;
@@ -252,6 +258,14 @@ namespace Store_Medkit
                 }
             }
             return null;
+        }
+    }
+    
+    public static class PlayerExtensions
+    {
+        public static bool IsAlive(this CCSPlayerController player)
+        {
+            return player?.PlayerPawn.Value?.LifeState == (byte)LifeState_t.LIFE_ALIVE;
         }
     }
 }
