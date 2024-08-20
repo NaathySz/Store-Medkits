@@ -2,6 +2,7 @@
     "Prefix": "{red}[Medkit] {white}",
 
     "Maximum uses per round": "Você chegou ao máximo de usos por round",
+    "You cannot use a medkit while dead": "Você não pode usar um medkit enquanto morto",
     "Not enough credits": "Sem créditos o suficiente para comprar um medkit",
     "Healing": "Você usou um medkit por {gold}{0} {white}créditos. Vida: {green}{1}{white}/{red}{2}{white}. Usos restantes nesse round: {darkblue}{3}",
     "Health set": "Você usou um medkit por {gold}{0} {white}créditos. Vida setada em {green}{1}{white}. Usos restantes nesse round: {darkblue}{2}",
