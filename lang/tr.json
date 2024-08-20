@@ -2,6 +2,7 @@
     "Prefix": "{red}[SağlıkKiti] {white}",
 
     "Maximum uses per round": "Tur başına maksimum kullanım sayısına ulaştınız.",
+    "You cannot use a medkit while dead": "Öldüğünüzde bir medkit kullanamazsınız",
     "Not enough credits": "Sağlık kiti almak için yeterli kredi yok",
     "Healing": "{gold}{0}{white} kredilik bir sağlık kiti kullandınız. Sağlığınız: {green}{1}{white}/{red}{2}{white}. Bu tur kalan kullanım limitiniz: {darkblue}{3}",
     "Health set": "{gold}{0}{white} krediye bir sağlık kiti kullandınız. Sağlığınız artık {green}{1}{white}. Bu tur kalan kullanım limitiniz: {darkblue}{2}",
