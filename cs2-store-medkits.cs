@@ -3,6 +3,7 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Admin;
+using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API.Modules.Timers;
 using StoreApi;
 using System.Collections.Concurrent;
@@ -25,6 +26,9 @@ namespace Store_Medkit
         [JsonPropertyName("min_hp")]
         public int MinHp { get; set; } = 50;
 
+        [JsonPropertyName("team")]
+        public string Team { get; set; } = "T"; // ALL | T | CT
+
         [JsonPropertyName("medkit_commands")]
         public List<string> MedkitCommands { get; set; } = ["medkit", "medic"];
 
@@ -37,10 +41,16 @@ namespace Store_Medkit
         [JsonPropertyName("custom")]
         public Dictionary<string, CustomMedkitConfig> CustomConfigs { get; set; } = new()
         {
-            { "@css/generic", new CustomMedkitConfig { Health = "60", MaxUsePerRound = 3, CreditCost = 200, MinHp = 30 } },
-            { "@css/vip", new CustomMedkitConfig { Health = "++90", MaxUsePerRound = 1, CreditCost = 300, MinHp = 10 } },
-            { "#admin", new CustomMedkitConfig { Health = "++10", MaxUsePerRound = 5, CreditCost = 50, MinHp = 70 } }
+            { "@css/generic", new CustomMedkitConfig { Health = "60", MaxUsePerRound = 3, CreditCost = 200, MinHp = 30, Team = "T" } },
+            { "@css/vip", new CustomMedkitConfig { Health = "++90", MaxUsePerRound = 1, CreditCost = 300, MinHp = 10 , Team = "CT" } },
+            { "#admin", new CustomMedkitConfig { Health = "++10", MaxUsePerRound = 5, CreditCost = 50, MinHp = 70, Team = "ALL" } }
         };
+
+        [JsonPropertyName("heal_success_sound")]
+        public string HealSuccessSound { get; set; } = "";
+
+        [JsonPropertyName("heal_failure_sound")]
+        public string HealFailureSound { get; set; } = "";
     }
 
     public class CustomMedkitConfig
@@ -56,6 +66,9 @@ namespace Store_Medkit
 
         [JsonPropertyName("min_hp")]
         public int? MinHp { get; set; }
+
+        [JsonPropertyName("team")]
+        public string? Team { get; set; }
     }
 
     public class PlayerMedkitUsage
@@ -73,7 +86,7 @@ namespace Store_Medkit
     public class Store_Medkit : BasePlugin, IPluginConfig<Store_MedkitConfig>
     {
         public override string ModuleName => "Store Module [Medkits]";
-        public override string ModuleVersion => "0.0.2";
+        public override string ModuleVersion => "0.1.0";
         public override string ModuleAuthor => "Nathy";
 
         public IStoreApi? StoreApi { get; set; }
@@ -122,11 +135,31 @@ namespace Store_Medkit
             if (!player.IsAlive())
             {
                 player.PrintToChat(Localizer["Prefix"] + "You cannot use a medkit now");
+                player.ExecuteClientCommand($"play {Config.HealFailureSound}");
                 return;
             }
 
             var customConfig = GetCustomConfig(player);
             int maxUsePerRound = customConfig?.MaxUsePerRound ?? Config.MaxUsePerRound;
+
+            string playerTeam = player.Team == CsTeam.CounterTerrorist ? "CT" : player.Team == CsTeam.Terrorist ? "T" : "ALL";
+            string allowedTeams = customConfig?.Team ?? Config.Team;
+
+            if (!allowedTeams.Contains(playerTeam) && allowedTeams != "ALL")
+            {
+                if (allowedTeams == "T" && playerTeam == "CT")
+                {
+                    player.PrintToChat(Localizer["Prefix"] + Localizer["You can only use this medkit as a Terrorist"]);
+                    player.ExecuteClientCommand($"play {Config.HealFailureSound}");
+                }
+                else if (allowedTeams == "CT" && playerTeam == "T")
+                {
+                    player.PrintToChat(Localizer["Prefix"] + Localizer["You can only use this medkit as a Counter-Terrorist"]);
+                    player.ExecuteClientCommand($"play {Config.HealFailureSound}");
+                }
+                return;
+            }
+
             if (!playerMedkitUsages.TryGetValue(player.SteamID.ToString(), out var playerUsage))
             {
                 playerUsage = new PlayerMedkitUsage(maxUsePerRound, Config.RegenInterval);
@@ -136,6 +169,7 @@ namespace Store_Medkit
             if (playerUsage.UsesLeft <= 0)
             {
                 player.PrintToChat(Localizer["Prefix"] + Localizer["Maximum uses per round"]);
+                player.ExecuteClientCommand($"play {Config.HealFailureSound}");
                 return;
             }
 
@@ -143,6 +177,7 @@ namespace Store_Medkit
             if (StoreApi!.GetPlayerCredits(player) < creditCost)
             {
                 player.PrintToChat(Localizer["Prefix"] + Localizer["Not enough credits"]);
+                player.ExecuteClientCommand($"play {Config.HealFailureSound}");
                 return;
             }
 
@@ -150,6 +185,7 @@ namespace Store_Medkit
             if (player.PlayerPawn.Value.Health >= minHp)
             {
                 player.PrintToChat(Localizer["Prefix"] + Localizer["Cannot use medkit with current HP", minHp]);
+                player.ExecuteClientCommand($"play {Config.HealFailureSound}");
                 return;
             }
 
@@ -206,6 +242,7 @@ namespace Store_Medkit
 
             var playerUsage = playerMedkitUsages[player.SteamID.ToString()];
             player.PrintToChat(Localizer["Prefix"] + Localizer["Healing", totalHealthToAdd, finalHealth, maxHealth, playerUsage.UsesLeft]);
+            player.ExecuteClientCommand($"play {Config.HealSuccessSound}");
         }
 
         private void SetHealthInstantly(CCSPlayerController player, int targetHealth, bool isIncremental = false)
@@ -226,6 +263,7 @@ namespace Store_Medkit
             if (newHealth < player.PlayerPawn.Value.Health)
             {
                 player.PrintToChat(Localizer["Prefix"] + Localizer["Cannot be set to a lower value"]);
+                player.ExecuteClientCommand($"play {Config.HealFailureSound}");
                 return;
             }
 
@@ -233,6 +271,7 @@ namespace Store_Medkit
             Utilities.SetStateChanged(player.PlayerPawn.Value, "CBaseEntity", "m_iHealth");
 
             player.PrintToChat(Localizer["Prefix"] + Localizer["Health set", creditCost, newHealth, playerUsage.UsesLeft]);
+            player.ExecuteClientCommand($"play {Config.HealSuccessSound}");
         }
 
         private int ParseHealthAmount(string amount, int currentHealth)
