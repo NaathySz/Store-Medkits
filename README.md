@@ -21,21 +21,21 @@ Config will be auto generated. Default:
       "health": "60", // Sets health to 60
       "max_uses": 3, // Max uses per round
       "credits": 200, // Credit cost
-      "min_hp": 30 // Minimum health required to use
+      "min_hp": 30, // Minimum health required to use
       "team": "T" // Team
     },
     "@css/vip": {
       "health": "++90", // Increase current health by 90; if health is 5, it will become 95
       "max_uses": 1,
       "credits": 300,
-      "min_hp": 10
+      "min_hp": 10,
       "team": "CT"
     },
     "#admin": {
       "health": "++10",
       "max_uses": 5,
       "credits": 50,
-      "min_hp": 70
+      "min_hp": 70,
       "team": "ALL"
     }
   },
