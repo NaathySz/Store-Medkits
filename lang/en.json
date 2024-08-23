@@ -4,6 +4,8 @@
     "Maximum uses per round": "You have reached the maximum uses per round",
     "You cannot use a medkit while dead": "You cannot use a medkit while dead",
     "Not enough credits": "Not enough credits to buy a medkit",
+    "You can only use this medkit as a Counter-Terrorist": "You can only use this medkit as a {blue}Counter-Terrorist",
+    "You can only use this medkit as a Terrorist": "You can only use this medkit as a {orange}Terrorist",
     "Healing": "You used a medkit for {gold}{0}{white} credits. Health: {green}{1}{white}/{red}{2}{white}. Uses left this round: {darkblue}{3}",
     "Health set": "You used a medkit for {gold}{0}{white} credits. Health set to {green}{1}{white}. Uses left this round: {darkblue}{2}",
     "Cannot be set to a lower value": "Health cannot be set to a lower value",
