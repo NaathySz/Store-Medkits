@@ -134,7 +134,7 @@ namespace Store_Medkit
 
             if (!player.IsAlive())
             {
-                player.PrintToChat(Localizer["Prefix"] + "You cannot use a medkit now");
+                player.PrintToChat(Localizer["Prefix"] + "You cannot use a medkit while dead");
                 player.ExecuteClientCommand($"play {Config.HealFailureSound}");
                 return;
             }
