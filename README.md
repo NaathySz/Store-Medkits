@@ -9,6 +9,7 @@ Config will be auto generated. Default:
   "max_use_per_round": 3,
   "credit_cost": 100,
   "min_hp": 50,
+  "team": "T", // ALL | CT | T 
   "medkit_commands": [
     "medkit",
     "medic"
@@ -21,20 +22,25 @@ Config will be auto generated. Default:
       "max_uses": 3, // Max uses per round
       "credits": 200, // Credit cost
       "min_hp": 30 // Minimum health required to use
+      "team": "T" // Team
     },
     "@css/vip": {
       "health": "++90", // Increase current health by 90; if health is 5, it will become 95
       "max_uses": 1,
       "credits": 300,
       "min_hp": 10
+      "team": "CT"
     },
     "#admin": {
       "health": "++10",
       "max_uses": 5,
       "credits": 50,
       "min_hp": 70
+      "team": "ALL"
     }
   },
+  "heal_success_sound": "", // Sound when healing is successful
+  "heal_failure_sound": "", // Sound when healing fails
   "ConfigVersion": 1
 }
 ```
